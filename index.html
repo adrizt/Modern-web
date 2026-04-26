@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Open Graph Meta Tags for FB/Twitter Preview -->
+    <meta property="og:title" content="Smooth Loading Experience | Modern Web Demo">
+    <meta property="og:description" content="Discover a seamless loading screen with animated progress bar. Built with pure HTML, CSS & JS. Optimized for social sharing.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Abstract gradient background with smooth loading animation">
+    <meta property="og:url" content="https://yourdomain.com">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Smooth Loading Experience | Modern Web Demo">
+    <meta name="twitter:description" content="Discover a seamless loading screen with animated progress bar.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80">
+    
+    <title>Smooth Loading Experience | Modern Web Demo</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+
+        .loader-logo {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .progress-container {
+            width: 300px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: 200px 0; }
+        }
+
+        .progress-text {
+            color: white;
+            font-family: 'Arial', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .main-content.show {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out 0.4s both;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .progress-container {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader-logo">🚀</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="progress-text" id="progressText">Loading... 0%</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="hero-section">
+            <h1 class="hero-title">Smooth Loading Experience</h1>
+            <p class="hero-subtitle">
+                Experience the perfect blend of performance and design. 
+                Our loading screen ensures users stay engaged while your content loads seamlessly.
+            </p>
+            <a href="#explore" class="cta-button">Explore More</a>
+        </div>
+    </div>
+
+    <script>
+        // Smooth Loading Animation
+        class LoadingScreen {
+            constructor() {
+                this.progress = 0;
+                this.maxProgress = 100;
+                this.increment = 0.5;
+                this.progressBar = document.getElementById('progressBar');
+                this.progressText = document.getElementById('progressText');
+                this.loadingScreen = document.getElementById('loadingScreen');
+                this.mainContent = document.getElementById('mainContent');
+                
+                this.init();
+            }
+
+            init() {
+                this.simulateLoading();
+            }
+
+            simulateLoading() {
+                const updateProgress = () => {
+                    this.progress += this.increment + Math.random() * 1.5;
+                    this.progress = Math.min(this.progress, this.maxProgress);
+
+                    // Update progress bar
+                    this.progressBar.style.width = this.progress + '%';
+                    this.progressText.textContent = `Loading... ${Math.floor(this.progress)}%`;
+
+                    if (this.progress >= this.maxProgress) {
+                        this.complete();
+                    } else {
+                        requestAnimationFrame(updateProgress);
+                    }
+                };
+
+                // Start after small delay for realism
+                setTimeout(() => {
+                    updateProgress();
+                }, 500);
+            }
+
+            complete() {
+                // Final animation
+                setTimeout(() => {
+                    this.loadingScreen.classList.add('hidden');
+                    setTimeout(() => {
+                        this.loadingScreen.style.display = 'none';
+                        this.mainContent.classList.add('show');
+                    }, 500);
+                }, 800);
+            }
+        }
+
+        // Initialize loading screen when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new LoadingScreen();
+        });
+
+        // Preload critical resources for better performance
+        window.addEventListener('load', () => {
+            // Additional resources can be preloaded here
+            console.log('All resources loaded successfully!');
+        });
+    </script>
+</body>
+</html>
