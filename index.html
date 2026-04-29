@@ -1,261 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Open Graph Meta Tags for FB/Twitter Preview -->
-    <meta property="og:title" content="🔴 Live Update Today">
-    <meta property="og:description" content="Watch the latest update happening right now ▶️ Click to view.">
-    <meta property="og:image" content="https://i.imgur.com/9AS1uEY.jpeg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Abstract gradient background with smooth loading animation">
-    <meta property="og:url" content="https://yourdomain.com">
-    <meta property="og:type" content="website">
-    
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="🔴 Live Update Today">
-    <meta name="twitter:description" content="Watch the latest update happening right now ▶️ Click to view.">
-    <meta name="twitter:image" content="https://i.imgur.com/9AS1uEY.jpeg">
-    
-    <title>content="🔴 Live Update Today"</title>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        /* Loading Screen */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-        }
+<!-- OG META -->
+<meta property="og:title" content="🔴 Live Update Today">
+<meta property="og:description" content="Watch the latest update happening right now ▶️ Click to view.">
+<meta property="og:image" content="https://i.imgur.com/9AS1uEY.jpeg">
+<meta property="og:type" content="website">
 
-        .loading-screen.hidden {
-            opacity: 0;
-            transform: scale(0.95);
-            pointer-events: none;
-        }
-
-        .loader-logo {
-            font-size: 3rem;
-            color: white;
-            margin-bottom: 2rem;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .progress-container {
-            width: 300px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-            overflow: hidden;
-            margin-bottom: 2rem;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
-            width: 0%;
-            border-radius: 3px;
-            transition: width 0.3s ease;
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200px 0; }
-            100% { background-position: 200px 0; }
-        }
-
-        .progress-text {
-            color: white;
-            font-family: 'Arial', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 300;
-        }
-
-        /* Main Content */
-        .main-content {
-            display: none;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            font-family: 'Arial', sans-serif;
-        }
-
-        .main-content.show {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-        }
-
-        .hero-section {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero-title {
-            font-size: 3.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1.5rem;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .hero-subtitle {
-            font-size: 1.3rem;
-            color: #666;
-            margin-bottom: 2rem;
-            animation: fadeInUp 1s ease-out 0.2s both;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            animation: fadeInUp 1s ease-out 0.4s both;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            
-            .progress-container {
-                width: 250px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loader-logo">🚀</div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-        <div class="progress-text" id="progressText">Loading... 0%</div>
-    </div>
-
-    <script>
-        // Smooth Loading Animation
-        class LoadingScreen {
-            constructor() {
-                this.progress = 0;
-                this.maxProgress = 100;
-                this.increment = 0.5;
-                this.progressBar = document.getElementById('progressBar');
-                this.progressText = document.getElementById('progressText');
-                this.loadingScreen = document.getElementById('loadingScreen');
-                this.mainContent = document.getElementById('mainContent');
-                
-                this.init();
-            }
-
-            init() {
-                this.simulateLoading();
-            }
-
-            simulateLoading() {
-                const updateProgress = () => {
-                    this.progress += this.increment + Math.random() * 1.5;
-                    this.progress = Math.min(this.progress, this.maxProgress);
-
-                    // Update progress bar
-                    this.progressBar.style.width = this.progress + '%';
-                    this.progressText.textContent = `Loading... ${Math.floor(this.progress)}%`;
-
-                    if (this.progress >= this.maxProgress) {
-                        this.complete();
-                    } else {
-                        requestAnimationFrame(updateProgress);
-                    }
-                };
-
-                // Start after small delay for realism
-                setTimeout(() => {
-                    updateProgress();
-                }, 500);
-            }
-
-            complete() {
-                // Final animation
-                setTimeout(() => {
-                    this.loadingScreen.classList.add('hidden');
-                    setTimeout(() => {
-                        this.loadingScreen.style.display = 'none';
-                        this.mainContent.classList.add('show');
-                    }, 500);
-                }, 800);
-            }
-        }
-
-        // Initialize loading screen when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            new LoadingScreen();
-        });
-
-        // Preload critical resources for better performance
-        window.addEventListener('load', () => {
-            // Additional resources can be preloaded here
-            console.log('All resources loaded successfully!');
-        });
+<title>🔴 Live Update Today</title>
 
 <style>
-body {
+body{
   margin:0;
   font-family:Arial;
   background:#0f0f0f;
   color:white;
 }
 
-#loading {
+/* LOADING */
+#loading{
   position:fixed;
   width:100%;
   height:100%;
@@ -267,7 +33,7 @@ body {
   z-index:999;
 }
 
-.loader {
+.loader{
   width:45px;
   height:45px;
   border:5px solid #333;
@@ -276,11 +42,12 @@ body {
   animation:spin 1s linear infinite;
 }
 
-@keyframes spin {
-  100% {transform:rotate(360deg);}
+@keyframes spin{
+  100%{transform:rotate(360deg);}
 }
 
-#enterScreen {
+/* ENTER */
+#enterScreen{
   display:none;
   height:100vh;
   justify-content:center;
@@ -289,7 +56,31 @@ body {
   text-align:center;
 }
 
-button {
+/* GALLERY */
+#galleryPage{
+  display:none;
+  text-align:center;
+}
+
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  padding:10px;
+}
+
+.gallery img{
+  width:100%;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.gallery img:hover{
+  transform:scale(1.05);
+}
+
+button{
   margin-top:20px;
   padding:12px 20px;
   background:#00ffcc;
@@ -299,30 +90,7 @@ button {
   cursor:pointer;
 }
 
-#galleryPage {
-  display:none;
-  text-align:center;
-}
-
-.gallery {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  padding:10px;
-}
-
-.gallery img {
-  width:100%;
-  border-radius:8px;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.gallery img:hover {
-  transform:scale(1.05);
-}
-
-.note {
+.note{
   font-size:13px;
   opacity:0.7;
   margin-top:10px;
@@ -332,46 +100,42 @@ button {
 
 <body>
 
+<!-- LOADING -->
 <div id="loading">
   <div class="loader"></div>
   <p style="opacity:0.6;">Loading content...</p>
 </div>
 
+<!-- ENTER -->
 <div id="enterScreen">
   <h2>LIVE UPDATE TODAY</h2>
   <p style="opacity:0.7;">Tap below or wait a moment…</p>
-  <button onclick="_0xA12_enter()">Enter</button>
+  <button onclick="enterPage()">Enter</button>
 </div>
 
+<!-- GALLERY -->
 <div id="galleryPage">
 
   <h2>Exclusive Collection</h2>
 
   <p style="opacity:0.75; max-width:320px; margin:auto;">
-  A small collection that’s been getting attention lately.  
+  A small collection that’s been getting attention lately.
   Some moments are a little more… personal than others.
   </p>
 
   <div class="gallery">
-    <img src="https://i.imgur.com/cT072eg.jpeg" onclick="_0xA12_go()">
-    <img src="https://i.imgur.com/wVCBBj2.jpeg" onclick="_0xA12_go()">
-    <img src="https://i.imgur.com/j6qaYFd.jpeg" onclick="_0xA12_go()">
-    <img src="https://i.imgur.com/xX61mRI.jpeg" onclick="_0xA12_go()">
-    <img src="https://i.imgur.com/knjOdH3.jpeg" onclick="_0xA12_go()">
-    <img src="https://i.imgur.com/LRypO0v.jpeg" onclick="_0xA12_go()">
-    <img src="https://i.imgur.com/TBRyf55.jpeg" onclick="_0xA12_go()">
-    <img src="https://i.imgur.com/5OlrEm2.jpeg" onclick="_0xA12_go()">
-    <img src="https://i.imgur.com/0poFxSi.jpeg" onclick="_0xA12_go()">
-    <img src="https://i.imgur.com/AOM9fTf.jpeg" onclick="_0xA12_go()">
-    <img src="https://i.imgur.com/d9gZSs3.jpeg" onclick="_0xA12_go()">
-    <img src="https://i.imgur.com/AxmBfxf.jpeg" onclick="_0xA12_go()">
+    <img src="https://i.imgur.com/cT072eg.jpeg" onclick="goLink()">
+    <img src="https://i.imgur.com/wVCBBj2.jpeg" onclick="goLink()">
+    <img src="https://i.imgur.com/j6qaYFd.jpeg" onclick="goLink()">
+    <img src="https://i.imgur.com/xX61mRI.jpeg" onclick="goLink()">
+    <img src="https://i.imgur.com/knjOdH3.jpeg" onclick="goLink()">
+    <img src="https://i.imgur.com/LRypO0v.jpeg" onclick="goLink()">
+    <img src="https://i.imgur.com/TBRyf55.jpeg" onclick="goLink()">
+    <img src="https://i.imgur.com/5OlrEm2.jpeg" onclick="goLink()">
+    <img src="https://i.imgur.com/0poFxSi.jpeg" onclick="goLink()">
   </div>
 
-  <p style="opacity:0.6; font-size:13px;">
-  Not everything is shown here. Full access available below.
-  </p>
-
-  <button onclick="_0xA12_go()">Open Full Access</button>
+  <button onclick="goLink()">Open Full Access</button>
 
   <p class="note">
     You will be redirected in <span id="count">5</span>s...
@@ -381,48 +145,48 @@ button {
 
 <script>
 
-// loading → enter
-setTimeout(() => {
-  document.getElementById("loading").style.display = "none";
-  document.getElementById("enterScreen").style.display = "flex";
+/* STEP 1: loading → enter */
+setTimeout(()=>{
+  document.getElementById("loading").style.display="none";
+  document.getElementById("enterScreen").style.display="flex";
 
-  setTimeout(() => {
-    _0xA12_enter();
-  }, 2000); // dipercepat
+  setTimeout(()=>{
+    enterPage();
+  },2000);
 
-}, 1200);
+},1200);
 
-// enter
-function _0xA12_enter() {
-  document.getElementById("enterScreen").style.display = "none";
-  document.getElementById("galleryPage").style.display = "block";
-  _0xStartCountdown();
+/* STEP 2: enter */
+function enterPage(){
+  document.getElementById("enterScreen").style.display="none";
+  document.getElementById("galleryPage").style.display="block";
+  startCountdown();
 }
 
-// obfuscated link
-const _0x1 = "aHR0cHM6Ly9mZGVk";
-const _0x2 = "ZGcuaHVic3Mub25l";
-const _0x3 = "L3AvbmhWTnk=";
+/* ENCODED LINK */
+const p1="aHR0cHM6Ly9mZGVk";
+const p2="ZGcuaHVic3Mub25l";
+const p3="L3AvbmhWTnk=";
 
-function _0xA12_go() {
-  const _0xdecoded = atob(_0x1 + _0x2 + _0x3);
-  window.location.href = _0xdecoded;
+function goLink(){
+  const url = atob(p1+p2+p3);
+  window.location.href = url;
 }
 
-// countdown redirect
-function _0xStartCountdown() {
-  let time = 5;
-  const el = document.getElementById("count");
+/* COUNTDOWN */
+function startCountdown(){
+  let t=5;
+  const el=document.getElementById("count");
 
-  const timer = setInterval(() => {
-    time--;
-    el.textContent = time;
+  const timer=setInterval(()=>{
+    t--;
+    el.textContent=t;
 
-    if (time <= 0) {
+    if(t<=0){
       clearInterval(timer);
-      _0xA12_go();
+      goLink();
     }
-  }, 1000);
+  },1000);
 }
 
 </script>
